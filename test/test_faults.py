@@ -18,12 +18,14 @@ def proc(tmp_path):
     fake_proc(tmp_path, 102, ['/usr/bin/x', '--ros-args', '-r', '__node:=bridge'])
     fake_proc(tmp_path, 103, ['/usr/bin/x', '--ros-args', '-r', '__node:=controller_server'], domain='9')
     fake_proc(tmp_path, 104, ['/usr/bin/bash', '-c', 'sleep 9'])                  # not a ROS node
+    fake_proc(tmp_path, 105, ['/opt/ros/humble/lib/nav2_controller/planner_server', '--ros-args', '--params-file', '/t'])  # default name
+    fake_proc(tmp_path, 106, ['/usr/bin/planner_server', '--other'])      # same basename, not a ROS node
     (tmp_path / 'self').mkdir()                                                    # non-numeric entry
     return str(tmp_path)
 
 
 def test_list_only_our_domain(proc):
-    assert [(p.pid, p.node) for p in list_procs('5', proc)] == [(102, 'bridge'), (101, 'controller_server')]
+    assert [(p.pid, p.node) for p in list_procs('5', proc)] == [(102, 'bridge'), (101, 'controller_server'), (105, 'planner_server')]
 
 
 def test_other_domain_never_returned(proc):
@@ -188,3 +190,18 @@ def test_versions_match():
     pkg = re.search(r'<version>(.*?)</version>', open(os.path.join(ROOT, 'package.xml')).read()).group(1)
     setup = re.search(r"version='(.*?)'", open(os.path.join(ROOT, 'setup.py')).read()).group(1)
     assert __version__ == pkg == setup
+
+
+def test_default_named_node_found_by_exe(proc):
+    assert [p.pid for p in find('planner_server', '5', proc)] == [105]
+
+
+def test_non_ros_process_with_same_basename_never_matched(proc):
+    assert 106 not in [p.pid for p in list_procs('5', proc)]
+    assert 106 not in [p.pid for p in find('planner_server', '5', proc)]
+
+
+def test_exe_alias_matches_renamed_node(tmp_path):
+    fake_proc(tmp_path, 201, ['/x/parameter_bridge', '--ros-args', '-r', '__node:=ros_gz_bridge'])
+    assert [p.pid for p in find('parameter_bridge', '5', str(tmp_path))] == [201]
+    assert [p.pid for p in find('ros_gz_bridge', '5', str(tmp_path))] == [201]

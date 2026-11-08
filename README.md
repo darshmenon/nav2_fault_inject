@@ -8,7 +8,7 @@ Does your robot notice when something dies? Freeze any node of a running ROS 2 s
 
 ```bash
 ros2 run nav2_fault_inject nav2_fault_inject list                       # nodes you can target
-ros2 run nav2_fault_inject nav2_fault_inject hang ros_gz_bridge --for 10   # sensor/TF dropout for 10 s
+ros2 run nav2_fault_inject nav2_fault_inject hang parameter_bridge --for 10   # sim bridge: sensor/TF dropout for 10 s
 ros2 run nav2_fault_inject nav2_fault_inject hang controller_server --for 5 # a hung controller
 ros2 run nav2_fault_inject nav2_fault_inject run scenario.yaml --timeline out.json
 ros2 run nav2_fault_inject nav2_fault_inject --dry-run hang bt_navigator --for 3   # touch nothing
@@ -17,7 +17,7 @@ ros2 run nav2_fault_inject nav2_fault_inject --dry-run hang bt_navigator --for 3
 ```yaml
 # scenario.yaml - each node is frozen at `at` seconds for `for` seconds
 faults:
-  - {at: 20, node: ros_gz_bridge,     for: 8}
+  - {at: 20, node: parameter_bridge,  for: 8}
   - {at: 45, node: controller_server, for: 5}
 ```
 
@@ -31,6 +31,6 @@ Pausing the process that hosts a node (`SIGSTOP`, then `SIGCONT`) freezes everyt
 
 Pairs with [nav2_doctor](https://github.com/darshmenon/nav2_doctor): break the stack with this, then see the doctor name the cause.
 
-Limits: a node that runs composed inside another process pauses with that whole process, and `list` shows only nodes launched with an explicit `__node:=` name (as `ros2 launch` does). Linux only.
+Limits: a node that runs composed inside another process pauses with that whole process, and you can target a node by its name or its executable name (`list` shows both), and only processes started with `--ros-args` are considered. Linux only.
 
 Build: `colcon build --packages-select nav2_fault_inject`. Tests: `python3 -m pytest test` (no ROS needed).

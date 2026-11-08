@@ -16,6 +16,7 @@ class Proc:
     pid: int
     node: str
     domain: str
+    exe: str = ''
 
 
 def _read(path):
@@ -24,7 +25,8 @@ def _read(path):
 
 
 def list_procs(domain=None, proc_root='/proc', self_pid=None):
-    """ROS node processes (those launched with __node:=NAME) in `domain` (default: our own)."""
+    """ROS node processes in `domain` (default: our own): those with `__node:=NAME`, or any process
+    started with `--ros-args` (node name then defaults to the executable's name)."""
     domain = os.environ.get('ROS_DOMAIN_ID', '') if domain is None else str(domain)
     self_pid = os.getpid() if self_pid is None else self_pid
     out = []
@@ -33,13 +35,16 @@ def list_procs(domain=None, proc_root='/proc', self_pid=None):
             continue
         try:
             args = _read(f'{proc_root}/{d}/cmdline').split('\0')
+            exe = os.path.basename(args[0]) if args and args[0] else ''
             node = next((a[len('__node:='):] for a in args if a.startswith('__node:=')), None)
-            if node is None:
+            if node is None and '--ros-args' in args:
+                node = exe
+            if not node:
                 continue
             env = dict(kv.split('=', 1) for kv in _read(f'{proc_root}/{d}/environ').split('\0') if '=' in kv)
             if env.get('ROS_DOMAIN_ID', '') != domain:
                 continue
-            out.append(Proc(int(d), node, domain))
+            out.append(Proc(int(d), node, domain, exe))
         except OSError:
             continue
     return sorted(out, key=lambda p: (p.node, p.pid))
@@ -47,7 +52,7 @@ def list_procs(domain=None, proc_root='/proc', self_pid=None):
 
 def find(node, domain=None, proc_root='/proc'):
     node = node.lstrip('/')
-    return [p for p in list_procs(domain, proc_root) if p.node == node]
+    return [p for p in list_procs(domain, proc_root) if node in (p.node, p.exe)]
 
 
 class Injector:

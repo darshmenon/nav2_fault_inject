@@ -25,7 +25,7 @@ def main(argv=None):
     if a.cmd == 'list':
         procs = list_procs(a.domain)
         for p in procs:
-            print(f'{p.pid:8d}  {p.node}')
+            print(f'{p.pid:8d}  {p.node}' + (f'  (exe {p.exe})' if p.exe and p.exe != p.node else ''))
         print(f'{len(procs)} node process(es) in ROS_DOMAIN_ID={p.domain if procs else a.domain or "(unset)"}')
         return 0
 
