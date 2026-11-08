@@ -66,7 +66,7 @@ class Injector:
 
     def _rec(self, action, p):
         wall = time.strftime('%H:%M:%S')
-        self.timeline.append({'t': round(time.monotonic() - self._t0, 2), 'wall': wall, 'action': action,
+        self.timeline.append({'t': round(time.monotonic() - self._t0, 2), 'wall': wall, 'ts': round(time.time(), 3), 'action': action,
                               'node': p.node, 'pid': p.pid})
         self._log(f'{wall} [{self.timeline[-1]["t"]:6.2f}s] {action:7s} {p.node} (pid {p.pid})'
                   + ('  [dry-run]' if self.dry_run else ''))
@@ -121,8 +121,8 @@ def hang(node, seconds, domain=None, inj=None, sleep=time.sleep, proc_root='/pro
     return procs
 
 
-def parse_scenario(text):
-    """YAML list of {at: seconds, node: name, for: seconds}. Returns sorted [(at, node, dur)]."""
+def parse_scenario_full(text):
+    """YAML list of {at, node, for, expect?}. Returns sorted dicts {at, node, for, expect}."""
     import yaml
     data = yaml.safe_load(text)
     items = data['faults'] if isinstance(data, dict) else data
@@ -134,27 +134,39 @@ def parse_scenario(text):
             raise ValueError(f'fault #{i + 1} needs numeric `at`, `for` and a `node`: {it!r}') from e
         if at < 0 or dur <= 0:
             raise ValueError(f'fault #{i + 1}: `at` must be >= 0 and `for` > 0: {it!r}')
-        out.append((at, node, dur))
-    return sorted(out)
+        exp = it.get('expect')
+        if exp is not None and not isinstance(exp, dict):
+            raise ValueError(f'fault #{i + 1}: `expect` must be a mapping: {exp!r}')
+        out.append({'at': at, 'node': node, 'for': dur, 'expect': exp})
+    return sorted(out, key=lambda f: (f['at'], f['node']))
 
 
-def run_scenario(faults, domain=None, inj=None, now=time.monotonic, sleep=time.sleep, proc_root='/proc'):
+def parse_scenario(text):
+    """Same file as parse_scenario_full, as sorted [(at, node, dur)] tuples (no expectations)."""
+    return [(f['at'], f['node'], f['for']) for f in parse_scenario_full(text)]
+
+
+def run_scenario(faults, domain=None, inj=None, now=time.monotonic, sleep=time.sleep, proc_root='/proc', marks=None):
     """Run timed faults. Each node is paused at `at` and resumed after `for`. Always cleans up."""
     inj = inj or Injector()
-    events = []                                  # (time, 0=resume/1=pause, node)
-    for at, node, dur in faults:
+    events = []                                  # (time, 0=resume/1=pause, node, fault index)
+    for k, (at, node, dur) in enumerate(faults):
         if not find(node, domain, proc_root):
             raise LookupError(f'no process for node "{node}" - aborting before injecting anything')
-        events += [(at, 1, node), (at + dur, 0, node)]
+        events += [(at, 1, node, k), (at + dur, 0, node, k)]
     events.sort(key=lambda e: (e[0], e[1]))
+    if marks is not None:
+        marks.extend({} for _ in faults)         # marks[k] = {'pause_ts', 'resume_ts'} (epoch seconds)
     t0 = now()
     try:
-        for t, is_pause, node in events:
+        for t, is_pause, node, k in events:
             delay = t - (now() - t0)
             if delay > 0:
                 sleep(delay)
             procs = find(node, domain, proc_root)
             (inj.pause if is_pause else inj.resume)(procs)
+            if marks is not None:
+                marks[k]['pause_ts' if is_pause else 'resume_ts'] = time.time()
     finally:
         inj.close()
     return inj.timeline

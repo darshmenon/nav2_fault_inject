@@ -1,0 +1,11 @@
+# Works against the rosnav sim (ros2 launch rosnav_bot slam_nav.launch.py)
+# Run: nav2_fault_inject run examples/rosnav_scenario.yaml --check
+faults:
+  - at: 5
+    node: controller_server
+    for: 6
+    expect: {detect: [NO_CMD_VEL], within: 10, clear_within: 20}
+  - at: 25
+    node: ros_gz_bridge
+    for: 5
+    expect: {detect: [SCAN_STALE], within: 8, clear_within: 20}

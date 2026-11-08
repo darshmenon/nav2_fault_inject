@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+- `expect:` blocks per fault (`detect`, `within`, `clear`, `clear_within`, `forbid`) and `run --check`: runs nav2_doctor `--json` alongside, prints PASS/FAIL per fault, exits 1 on any FAIL.
+- `--doctor-cmd`, `--ns`; timeline entries carry an epoch `ts`.
+
 ## 0.1.2
 - Log lines and `--timeline` entries carry wall-clock time (`13:56:07 [  0.01s] PAUSE ...`) so they line up with other tools' logs.
 

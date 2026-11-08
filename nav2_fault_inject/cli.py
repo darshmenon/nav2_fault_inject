@@ -4,9 +4,11 @@ import argparse
 import json
 import signal
 import sys
+import time
 
 from . import __version__
-from .faults import Injector, hang, list_procs, parse_scenario, run_scenario
+from .check import DoctorWatcher, evaluate, format_verdicts, normalize
+from .faults import Injector, hang, list_procs, parse_scenario_full, run_scenario
 
 
 def main(argv=None):
@@ -20,6 +22,9 @@ def main(argv=None):
     h.add_argument('node'); h.add_argument('--for', dest='secs', type=float, required=True)
     r = sub.add_parser('run', help='run a timed scenario file')
     r.add_argument('scenario'); r.add_argument('--timeline', help='write the timeline as JSON')
+    r.add_argument('--check', action='store_true', help='run nav2_doctor alongside and assert each fault\'s `expect:`; exit 1 on any FAIL')
+    r.add_argument('--doctor-cmd', help='command emitting nav2_doctor --json lines (default: python -m nav2_doctor.doctor)')
+    r.add_argument('--ns', default='', help='namespace passed to the doctor')
     a = ap.parse_args(argv)
 
     if a.cmd == 'list':
@@ -35,9 +40,35 @@ def main(argv=None):
         if a.cmd == 'hang':
             hang(a.node, a.secs, a.domain, inj)
         else:
-            tl = run_scenario(parse_scenario(open(a.scenario).read()), a.domain, inj)
+            faults = parse_scenario_full(open(a.scenario).read())
+            for f in faults:
+                normalize(f['expect'])                       # fail on bad expect before injecting
+            tuples = [(f['at'], f['node'], f['for']) for f in faults]
+            if not a.check:
+                tl = run_scenario(tuples, a.domain, inj)
+            else:
+                import os
+                if a.domain is not None:
+                    os.environ['ROS_DOMAIN_ID'] = str(a.domain)
+                w, marks = DoctorWatcher(a.doctor_cmd, a.ns), []
+                w.start()
+                try:
+                    if not w.wait_for_first(20):
+                        w.stop()
+                        print(f'error: doctor produced no report ({" ".join(w.cmd[:3])}...): {w.stderr.strip() or "no output"}\n'
+                              'install nav2_doctor (pip install nav2_doctor / colcon) or pass --doctor-cmd', file=sys.stderr)
+                        return 2
+                    tl = run_scenario(tuples, a.domain, inj, marks=marks)
+                    time.sleep(max([normalize(f['expect'])['clear_within'] for f in faults] + [0]) + 1)
+                finally:
+                    w.stop()
+                verdicts = [evaluate(f, m.get('pause_ts'), m.get('resume_ts'), w.reports) for f, m in zip(faults, marks)]
+                print(format_verdicts(verdicts, faults))
+                rc = 0 if all(v['passed'] for v in verdicts) else 1
             if a.timeline:
                 json.dump(tl, open(a.timeline, 'w'), indent=2)
+            if a.check:
+                return rc
     except LookupError as e:
         print(f'error: {e}', file=sys.stderr)
         return 2
