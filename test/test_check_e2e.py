@@ -5,7 +5,9 @@ import subprocess
 import sys
 import time
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import nav2_fault_inject
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(nav2_fault_inject.__file__)))   # works in the repo and when vendored
 
 DOCTOR = r'''
 import json, sys, time
