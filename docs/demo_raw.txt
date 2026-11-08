@@ -1,0 +1,88 @@
+--- nav2_doctor 13:58:05 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:06 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:07 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:08 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:09 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:10 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:11 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:12 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:13 ns="" ---
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->left_wheel stopped 2.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->right_wheel stopped 2.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform odom->base_link stopped 2.5s ago while other TF is alive
+[31mERROR[0m [ODOM_STALE] odometry silent for 2.5s
+[31mERROR[0m [SCAN_STALE] laser scan silent for 2.5s
+[31mERROR[0m [COSTMAP_STALE] local costmap not updating (2.8s) - usually a TF or scan problem upstream
+--- nav2_doctor 13:58:14 ns="" ---
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->left_wheel stopped 3.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->right_wheel stopped 3.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform odom->base_link stopped 3.5s ago while other TF is alive
+[31mERROR[0m [ODOM_STALE] odometry silent for 3.5s
+[31mERROR[0m [SCAN_STALE] laser scan silent for 3.5s
+[31mERROR[0m [COSTMAP_STALE] local costmap not updating (3.8s) - usually a TF or scan problem upstream
+--- nav2_doctor 13:58:15 ns="" ---
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->left_wheel stopped 4.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->right_wheel stopped 4.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform odom->base_link stopped 4.5s ago while other TF is alive
+[31mERROR[0m [ODOM_STALE] odometry silent for 4.5s
+[31mERROR[0m [SCAN_STALE] laser scan silent for 4.5s
+[31mERROR[0m [COSTMAP_STALE] local costmap not updating (4.8s) - usually a TF or scan problem upstream
+--- nav2_doctor 13:58:16 ns="" ---
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->left_wheel stopped 5.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->right_wheel stopped 5.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform odom->base_link stopped 5.5s ago while other TF is alive
+[31mERROR[0m [ODOM_STALE] odometry silent for 5.5s
+[31mERROR[0m [SCAN_STALE] laser scan silent for 5.5s
+[31mERROR[0m [COSTMAP_STALE] local costmap not updating (5.8s) - usually a TF or scan problem upstream
+--- nav2_doctor 13:58:17 ns="" ---
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->left_wheel stopped 6.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->right_wheel stopped 6.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform odom->base_link stopped 6.5s ago while other TF is alive
+[31mERROR[0m [ODOM_STALE] odometry silent for 6.5s
+[31mERROR[0m [SCAN_STALE] laser scan silent for 6.5s
+[31mERROR[0m [COSTMAP_STALE] local costmap not updating (6.8s) - usually a TF or scan problem upstream
+--- nav2_doctor 13:58:18 ns="" ---
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->left_wheel stopped 7.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform base_link->right_wheel stopped 7.5s ago while other TF is alive
+[31mERROR[0m [TF_EDGE_STALE] transform odom->base_link stopped 7.5s ago while other TF is alive
+[31mERROR[0m [ODOM_STALE] odometry silent for 7.5s
+[31mERROR[0m [SCAN_STALE] laser scan silent for 7.5s
+[31mERROR[0m [COSTMAP_STALE] local costmap not updating (7.8s) - usually a TF or scan problem upstream
+--- nav2_doctor 13:58:19 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:20 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:21 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:22 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:23 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:24 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:25 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:26 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:27 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:28 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:29 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:30 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:31 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:32 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected
+--- nav2_doctor 13:58:33 ns="" ---
+[32mOK   [0m [HEALTHY] no stall causes detected

@@ -1,0 +1,2 @@
+13:58:10 [  0.02s] PAUSE   parameter_bridge (pid 511740)
+13:58:18 [  8.02s] RESUME  parameter_bridge (pid 511740)

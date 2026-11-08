@@ -65,9 +65,10 @@ class Injector:
         self._t0 = time.monotonic()
 
     def _rec(self, action, p):
-        self.timeline.append({'t': round(time.monotonic() - self._t0, 2), 'action': action,
+        wall = time.strftime('%H:%M:%S')
+        self.timeline.append({'t': round(time.monotonic() - self._t0, 2), 'wall': wall, 'action': action,
                               'node': p.node, 'pid': p.pid})
-        self._log(f'[{self.timeline[-1]["t"]:7.2f}s] {action:7s} {p.node} (pid {p.pid})'
+        self._log(f'{wall} [{self.timeline[-1]["t"]:6.2f}s] {action:7s} {p.node} (pid {p.pid})'
                   + ('  [dry-run]' if self.dry_run else ''))
 
     def pause(self, procs):

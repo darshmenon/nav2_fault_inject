@@ -205,3 +205,12 @@ def test_exe_alias_matches_renamed_node(tmp_path):
     fake_proc(tmp_path, 201, ['/x/parameter_bridge', '--ros-args', '-r', '__node:=ros_gz_bridge'])
     assert [p.pid for p in find('parameter_bridge', '5', str(tmp_path))] == [201]
     assert [p.pid for p in find('ros_gz_bridge', '5', str(tmp_path))] == [201]
+
+
+def test_log_lines_carry_wall_clock_time():
+    lines = []
+    inj = Injector(kill=lambda *a: None, log=lines.append)
+    inj.pause([Proc(1, 'a', '')]); inj.close()
+    import re
+    assert all(re.match(r'\d\d:\d\d:\d\d \[ *[\d.]+s\] (PAUSE|RESUME)', l) for l in lines) and len(lines) == 2
+    assert all(re.fullmatch(r'\d\d:\d\d:\d\d', e['wall']) for e in inj.timeline)

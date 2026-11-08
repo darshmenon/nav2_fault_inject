@@ -6,6 +6,10 @@
 
 Does your robot notice when something dies? Freeze any node of a running ROS 2 stack for a few seconds and watch what happens.
 
+![nav2_fault_inject freezing the sim bridge for 8 seconds while nav2_doctor reports the stale TF, odom, scan and costmap, then recovers](docs/demo.gif)
+
+*Real run on a Gazebo maze sim: the bridge is frozen for 8 s, `nav2_doctor` names the cause about 3 s later, and both recover when it resumes. Raw logs: `docs/demo_raw.txt`, `docs/demo_events.txt`; renderer: `docs/make_demo_gif.py`.*
+
 ```bash
 ros2 run nav2_fault_inject nav2_fault_inject list                       # nodes you can target
 ros2 run nav2_fault_inject nav2_fault_inject hang parameter_bridge --for 10   # sim bridge: sensor/TF dropout for 10 s
