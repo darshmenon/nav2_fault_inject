@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Lint: no more `a; b` statements (flake8 clean), flake8 config in `setup.cfg`, `QUALITY_DECLARATION.md` (REP-2004 level 5).
+
 ## 0.2.0
 - `expect:` blocks per fault (`detect`, `within`, `clear`, `clear_within`, `forbid`) and `run --check`: runs nav2_doctor `--json` alongside, prints PASS/FAIL per fault, exits 1 on any FAIL.
 - `--doctor-cmd`, `--ns`; timeline entries carry an epoch `ts`.
