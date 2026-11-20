@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 0.2.1
 - Lint: no more `a; b` statements (flake8 clean), flake8 config in `setup.cfg`, `QUALITY_DECLARATION.md` (REP-2004 level 5).
 
 ## 0.2.0
